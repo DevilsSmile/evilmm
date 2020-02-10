@@ -1,0 +1,47 @@
+.fs-s {
+    font-size: 20px;
+}
+
+.fs-m {
+    font-size: 28px;
+}
+
+.fs-l {
+    font-size: 36px;
+}
+
+.fs-x {
+    font-size: 44px;
+}
+
+.fs-xl {
+    font-size: 60px;
+}
+
+.fs-xxl {
+    font-size: 100px;
+}
+
+.fs-xxxl {
+    font-size: 160px;
+}
+
+.fc-brand {
+    color: #fff;
+}
+
+.fc-success {
+    color: #fff;
+}
+
+.fc-warning {
+    color: #fff;
+}
+
+.fc-danger {
+    color: #fff;
+}
+
+.fc-info {
+    color: #fff;
+}
