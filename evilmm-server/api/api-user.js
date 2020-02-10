@@ -4,7 +4,7 @@
 // snowflake.init()
 // snowflake.create()
 
-const imResponse = require('./response.js')
+const imResponse = require('../database/response/index.js')
 const imDataBase = require('../database/link.js')
 
 

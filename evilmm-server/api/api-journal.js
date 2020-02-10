@@ -1,6 +1,6 @@
 const imSnowflake = require('../database/snowflake.js')
 
-const imResponse = require('./response.js')
+const imResponse = require('../database/response/index.js')
 const imDataBase = require('../database/link.js')
 const imDataBaseMessage = require('../database/message.js')
 

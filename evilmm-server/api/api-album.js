@@ -1,12 +1,11 @@
-const imSnowflake = require('../database/snowflake/index.js')
-
-const imResponse = require('./response.js')
-const imDataBase = require('../database/link.js')
-const imDataBaseMessage = require('../database/message.js')
-
 const imFileSystem = require('fs')
 const imTencentCOS = require('cos-nodejs-sdk-v5')
 
+const imMessage = require('../database/message.js')
+const imDataBase = require('../database/link.js')
+const imResponse = require('../database/response/index.js')
+const imCreateSnow = require('../database/snow/index.js')
+const imCloudSecret = require('../cloud/secret.js')
 
 /**
  * 相册相关接口
@@ -14,63 +13,91 @@ const imTencentCOS = require('cos-nodejs-sdk-v5')
  * @see database-journal.js
  */
 const output = {
-    bucketInfo: {
-        bucket: 'image-1256588539',
-        region: 'ap-shanghai',
-        secretId: 'AKID8BUioOcE4UAfDflrdSJTVl8mkbLtfxPE',
-        secretKey: 'FQpV7YrT0jItS1eUHsMiS6FF7vcNp8Uf',
-    },
-
-    snowflake: undefined,
+    snow: undefined,
     
     /**
-     *  接收前端发送的图片并且储存相关信息
+     *  接收前端发送的图片并且储存至云空间
      *  @function
      *  @param {string} funRequestData
      *  @param {object} funResponse
      *  @returns
      */
     insertAlbumImage: function (funRequestData, funResponse) {
-        function effect () {
-            // 上传相册文件到腾讯云的对象储存空间
-            let funTencentCOS = new imTencentCOS ({
-                SecretId: output.bucketInfo.secretId,
-                SecretKey: output.bucketInfo.secretKey
-            })
+        /**
+         *  获取 base64 图片保存到本地
+         *  @function
+         *  @param {string} funImageId - 文件标识
+         *  @returns
+         */
+        function saveUploadImage (funImageId) {
+            let funRegExp
 
-            funTencentCOS.putObject({
-                Bucket: output.bucketInfo.bucket,
-                Region: output.bucketInfo.region,
-                Key: 'album/123456789.jpg',                                     // 储存空间内的文件命名
-                StorageClass: 'STANDARD',
-                Body: imFileSystem.createReadStream('./upload/test.jpg'),       // 需要上传的文件路径
-                onProgress: function(progressData) {
-                    console.log(JSON.stringify(progressData))
+            // 获取文件后缀 data:image/xxxx;
+            funRegExp = new RegExp('(?<=data:image\/)[a-zA-Z]+')
+            let funFileType = funRequestData.match(funRegExp)[0]
+    
+            // 获取图片 base64 实际内容
+            let funBase64 = funRequestData.replace(/^data:image\/\w+;base64,/, '')
+            let funBuffer = new Buffer(funBase64, 'base64')
+            let funFileName = funImageId + '.' + funFileType
+            let funFilePath = './upload/'
+            imFileSystem.writeFile(funFilePath + funFileName, funBuffer, function (funError) {
+                if (funError) {
+
+                } else {
+                    uploadCloud(funFilePath, funFileName)
                 }
-            }, function(err, data) {
-                console.log(err || data)
             })
         }
 
+        /**
+         *  上传本地图片到云空间
+         *  @function
+         *  @param {string} funFilePath - 文件路径
+         *  @param {string} funFileName - 文件名称
+         *  @returns
+         */
+        function uploadCloud (funFilePath, funFileName) {
+            // 上传相册文件到腾讯云的对象储存空间
+            let funTencentCOS = new imTencentCOS ({
+                SecretId: imCloudSecret.secretId,
+                SecretKey: imCloudSecret.secretKey
+            })
 
+            funTencentCOS.putObject({
+                Bucket: imCloudSecret.bucket,
+                Region: imCloudSecret.region,
+                Key: 'album/' + funFileName,                                                    // 储存空间内的文件命名
+                StorageClass: 'STANDARD',
+                Body: imFileSystem.createReadStream(funFilePath + funFileName),                 // 需要上传的文件路径
+                // onProgress: function(progressData) {
+                //     console.log(JSON.stringify(progressData))
+                // }
+            }, function(funError, funData) {
+                if (funError) {
 
-        let funRegExp
+                }
 
-        // 获取文件后缀 data:image/xxxx;
-        funRegExp = new RegExp('(?<=data:image\/)[a-zA-Z]+')
-        let funFileType = funRequestData.match(funRegExp)[0]
+                if (funData) {
+                    imFileSystem.unlinkSync(funFilePath + funFileName)
+                    imResponse(funResponse, 20050, 'text', null)
+                }
+            })
+        }
 
-        // 获取图片 base64 实际内容
-        let funBase64 = funRequestData.replace(/^data:image\/\w+;base64,/, '')
-        let funBuffer = new Buffer(funBase64, 'base64')
-        imFileSystem.writeFile('test.' + funFileType, funBuffer, function (funError) {
-            if (funError) {
-                console.log(funError)
-            } else {
-                console.log('写入成功！')
-            }
-        })
-        imResponse(funResponse, '', 'ok')
+        // 生成文件唯一标识
+        if (output.snow === undefined) {
+            imCreateSnow(2)
+            .then(function (funResult) {
+                output.snow = funResult
+                saveUploadImage(output.snow.create())
+            })
+            .catch(function (funError) {
+                console.log('imCreateSnow Error', funError)
+            })
+        } else {
+            saveUploadImage(output.snow.create())
+        }
     },
 
     /**
@@ -128,72 +155,6 @@ const output = {
         let funUserName
         console.log('isRepeatUserName')
     },
-    
-    /**
-     *  添加新的日志。
-     *      优先判断 output.snowflake 实例是否存在。
-     *          true：正常添加日志操作.
-     *          false：先实例化 output.snowflake 对象，然后再执行添加日志操作。
-     *  @function
-     *  @param {string} paramInsertInfo - { "account": xx, "password": xx, "mail": xx, "phone": xx }
-     *  @returns {string}
-     */
-    insertJournalInfo: function (funRequestParam, funResponse) {
-        let funJsonObject = JSON.parse(funRequestParam)
-        
-        let funQuery = ''
-        let funDataBase = imDataBase.createConnection
-        
-        // 在初次添加日志时，初始对象，用于生成标识。
-        if (output.snowflake === undefined) {
-            funDataBase.query('select * from evilmm.snowflake where scene = 0;', function (funError, funResult) {
-                // 表示数据表里没有数据，直接插入新数据。
-                if (funResult.length === 0) {
-                    let funParam = {
-                        worker: 0,
-                        scene: 0,
-                        launch: 1579449600,
-                        created: 1579449600,
-                        modified: 0
-                    }
-                    funQuery = imDataBase.createQueryString('evilmm.snowflake', 'insert', funParam)
-                    funDataBase.query(funQuery, function (funError, funResult) {})
-                } else {
-                    let funParam = {
-                        worker: funResult[funResult.length - 1].worker + 1,
-                        scene: 0,
-                        launch: 1579449600,
-                        created: funResult[funResult.length - 1].created,
-                        modified: 0
-                    }
-                    
-                    // 如果当前时间小于 created 表示本地时间已经发生回滚，需要计算补偿时间。
-                    if (Math.round(new Date() / 1000) < funParam.created) {
-                        funParam.modified = funParam.created - Math.round(new Date() / 1000) + 1
-                    }
-                    
-                    funQuery = imDataBase.createQueryString('evilmm.snowflake', 'insert', funParam)
-                    funDataBase.query(funQuery, function (funError, funResult) {})
-                    
-                    output.snowflake = imSnowflake(funParam)
-                    
-                    // 添加日志内容
-                    funJsonObject.id = output.snowflake.create()
-                    funQuery = imDataBase.createQueryString('evilmm.topics', 'insert', funJsonObject)
-                    funDataBase.query(funQuery, function (funError, funResult) {
-                        imResponse(funResponse, '', imDataBaseMessage(funError, funResult))
-                    })
-                }
-            })
-        } else {
-            // 添加日志内容
-            funJsonObject.id = output.snowflake.create()
-            funQuery = imDataBase.createQueryString('evilmm.topics', 'insert', funJsonObject)
-            funDataBase.query(funQuery, function (funError, funResult) {
-                imResponse(funResponse, '', imDataBaseMessage(funError, funResult))
-            })
-        }
-    },
 
     /**
      *  更新日志信息。
@@ -218,7 +179,7 @@ const output = {
         let funDataBase = imDataBase.createConnection
         
         funDataBase.query('select id, title, time from evilmm.topics;', function (funError, funResult) {
-            imResponse(funResponse, '', imDataBaseMessage(funError, funResult))
+            imResponse(funResponse, '', imMessage(funError, funResult))
         })
     },
     
@@ -239,7 +200,7 @@ const output = {
         
         funQuery = imDataBase.createQueryString('evilmm.topics', 'select', funJsonObject)
         funDataBase.query('select * from evilmm.topics where id = ' + funJsonObject.id + ';', function (funError, funResult) {
-            imResponse(funResponse, '', imDataBaseMessage(funError, funResult))
+            imResponse(funResponse, '', imMessage(funError, funResult))
         })
     },
 }
