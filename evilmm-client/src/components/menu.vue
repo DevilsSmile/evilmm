@@ -26,15 +26,25 @@
         },
         methods: {
             eventHome: function () {
-                this.$router.push('/')
                 console.log('home')
+                let funRoutePath = '/'
+                if (this.$route.path !== funRoutePath) {
+                    this.$router.push(funRoutePath)
+                }
             },
             eventAlbum: function () {
                 console.log('album')
+                let funRoutePath = '/album'
+                if (this.$route.path !== funRoutePath) {
+                    this.$router.push(funRoutePath)
+                }
             },
             eventTopics: function () {
-                console.log('Topics')
-                this.$router.push('/topics')
+                console.log('Topic')
+                let funRoutePath = '/topic'
+                if (this.$route.path !== funRoutePath) {
+                    this.$router.push(funRoutePath)
+                }
             },
         },
     }

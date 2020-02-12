@@ -92,16 +92,13 @@
                 funRegExp = new RegExp('</div>', 'g')
                 funResult = funResult.replace(funRegExp, '</p>')
                 
-                imCorvus.init({
-                    baseURL: 'http://127.0.0.1:8888/'
-                })
-                imCorvus.request({
-                    url: 'journal/insertJournalInfo',
-                    data: {
+                imCorvus({
+                    url: 'topic/insertTopicInfo',
+                    data: JSON.stringify({
                         time: imMiment().format('YYYY-MM-DD hh:mm:ss'),
                         title: this.title,
                         content: funResult,
-                    }
+                    })
                 })
                 .then(function (funResult) {
                     console.log('funResult', funResult)

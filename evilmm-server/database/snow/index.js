@@ -6,8 +6,10 @@
  */
 
 const imDataBase = require('../link.js')
+const imKeyValues = require('../key-values.js')
+
+const imSnow = require('./create.js')
 const imOption = require('./option.js')
-const imSnowflake = require('./create.js')
 
 /**
  *  根据使用场景初始实例
@@ -24,10 +26,11 @@ const output = function (funScene) {
                 let funOption = JSON.parse(JSON.stringify(imOption))
                 funOption.scene = funScene
     
-                funQuery = imDataBase.createQueryString('evilmm.snowflake', 'insert', funOption)
+                let funObject = imKeyValues(funOption)
+                let funQuery = 'INSERT INTO evilmm.snowflake (' + funObject.keys + ') VALUES (' + funObject.values + ');'
                 funDataBase.query(funQuery, function (funError, funResult) {
                     // 返回雪花算法实例，此处需要补充数据库错误验证。
-                    resolve(imSnowflake(funOption))
+                    resolve(imSnow(funOption))
                 })
             } else {
                 let funOption = JSON.parse(JSON.stringify(imOption))
@@ -40,10 +43,11 @@ const output = function (funScene) {
                     funOption.modified = funOption.created - Math.round(new Date() / 1000) + 1
                 }
                 
-                funQuery = imDataBase.createQueryString('evilmm.snowflake', 'insert', funOption)
+                let funObject = imKeyValues(funOption)
+                let funQuery = 'INSERT INTO evilmm.snowflake (' + funObject.keys + ') VALUES (' + funObject.values + ');'
                 funDataBase.query(funQuery, function (funError, funResult) {
                     // 返回雪花算法实例，此处需要补充数据库错误验证。
-                    resolve(imSnowflake(funOption))
+                    resolve(imSnow(funOption))
                 })
             }
         })

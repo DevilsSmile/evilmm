@@ -6,8 +6,9 @@ import Router from 'vue-router'
 
 // 前端页面
 import Home from '@/page/display/home'
-import Topics from '@/page/display/topics'
-import Content from '@/page/display/content'
+import Album from '@/page/display/album'
+import Topic from '@/page/display/topic'
+import TopicInfo from '@/page/display/topic-info'
 
 // 后台页面
 import Backstage from '@/page/backstage/backstage'
@@ -18,19 +19,23 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'home',
+            name: 'Home',
             component: Home,
         }, {
-            path: '/topics',
-            name: 'topics',
-            component: Topics
+            path: '/album',
+            name: ' Album',
+            component: Album
         }, {
-            path: '/topics/content/*',
-            name: 'content',
-            component: Content
+            path: '/topic',
+            name: 'Topic',
+            component: Topic
+        }, {
+            path: '/topic/info/*',
+            name: 'TopicInfo',
+            component: TopicInfo
         }, {
             path: '/backstage',
-            name: 'backstage',
+            name: 'Backstage',
             component: Backstage,
         }, 
     ]

@@ -11,7 +11,7 @@ const Modular = {
             
             // 屏蔽系统自带的无关请求
             if (funPathname !== '/favicon.ico') {
-                imRoute(funRequest, funPathname, funResponse)
+                imRoute(funRequest, funResponse, funPathname)
             }
         })
         

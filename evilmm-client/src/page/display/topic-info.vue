@@ -17,7 +17,7 @@
     import imCorvus from '@/npm/corvus/corvus.js'
     
     export default {
-        name: 'TopicContent',
+        name: 'TopicInfo',
         data: function () {
             return {
                 topicInfo: {}
@@ -25,17 +25,15 @@
         },
         mounted: function () {
             let This = this
-            let funRegExp = new RegExp('(?<=\/topics\/content\/)[A-Za-z0-9]+')
+            let funRegExp = new RegExp('(?<=\/topic\/info\/)[A-Za-z0-9]+')
             let funResult = this.$route.path.toString().match(funRegExp)
+            console.log('id', funResult[0])
             
-            imCorvus.init({
-                baseURL: 'http://127.0.0.1:8888/'
-            })
-            imCorvus.request({
-                url: 'topics/queryTopicInfo',
-                data: {
+            imCorvus({
+                url: 'topic/queryTopicInfo', 
+                data: JSON.stringify({
                     id: funResult[0]
-                }
+                })
             })
             .then(function (funResult) {
                 This.topicInfo = JSON.parse(funResult).data[0]
