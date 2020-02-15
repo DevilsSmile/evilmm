@@ -10,7 +10,6 @@ import imSetHeader from './header'
 let output = function (funOption) {
     // 完整的配置参数示例：{ url: 'request/path', data: 'unknown', type: 'custom', method: 'post', timeout: 10000 }
     funOption = Object.assign(imOption, funOption)
-    console.log('funOption', funOption)
 
     let funPromise = new Promise(function (resolve, reject) {
         let funXhr = new XMLHttpRequest()

@@ -1,14 +1,14 @@
 <template>
-    <div class="topics">
-        <div class="topics-list row">
-            <div v-for="item in topics" v-bind:key="item.id" v-on:click="queryTopicInfo(item.id)">
-                <div class="topics-title">
+    <div class="records">
+        <div class="records-list row">
+            <div v-for="item in record" v-bind:key="item.id" v-on:click="queryRecordInfo(item.id)">
+                <div class="records-title">
                     <h2 class="fs-l fc-default">{{item.title}}</h2>
                 </div>
-                <div class="topics-info">
+                <div class="records-info">
                     <span class="fs-s fc-default">{{item.time}}</span>
                 </div>
-                <div class="topics-content">
+                <div class="records-content">
                     <p class="fs-s fc-default">{{item.abstract}}</p>
                 </div>
             </div>
@@ -21,15 +21,15 @@
     import imCorvus from '@/common/js/corvus/corvus.js'
     
     export default {
-        name: 'EditArticle',
+        name: 'RecordList',
         data: function () {
             return {
-                topics: []
+                record: []
             }
         },
-
+        
         mounted: function () {
-            this.queryTopics()
+            this.queryRecord()
         },
         
         methods: {
@@ -43,25 +43,25 @@
              *  @param {string} paramUpdateInfo - { "name": xx, "avatar": xx, "password": xx }
              *  @returns {string}
              */
-            queryTopics: function () {
+            queryRecord: function () {
                 let This = this
                 imCorvus({
-                    url: 'topic/queryTopics',
+                    url: 'record/queryRecord',
                     data: JSON.stringify({
                         page: 0
                     })
                 })
                 .then(function (funResult) {
                     let funResultData = JSON.parse(funResult)
-                    This.topics = funResultData.data
+                    This.record = funResultData.data
                 })
                 .catch(function (funError) {
                     console.log('funError', funError)
                 })
             },
             
-            queryTopicInfo: function (event) {
-                let funRoutePath = '/topic/info/'
+            queryRecordInfo: function (event) {
+                let funRoutePath = '/record/info/'
                 if (this.$route.path !== funRoutePath + event) {
                     this.$router.push(funRoutePath + event)
                 }
@@ -71,13 +71,13 @@
 </script>
     
 <style>
-    .topics {
+    .records {
         min-height: 720px;
         padding-bottom: 128px;
         background: #ffffff;
     }
 
-    .topics-list {
+    .records-list {
         display: flex;
         justify-content: space-between;
         flex-direction: row;
@@ -85,7 +85,7 @@
         padding: 0 64px;
     }
 
-    .topics-list > div {
+    .records-list > div {
         width: 560px;
         height: 192px;
         margin-bottom: 32px;
@@ -93,15 +93,15 @@
         background: #d6e5e3;
     }
 
-    .topics-title {
+    .records-title {
         margin-bottom: 4px;
     }
 
-    .topics-info {
+    .records-info {
         margin-bottom: 12px;
     }
     
-    .topics-content p {
+    .records-content p {
         line-height: 18px;
     }
 </style>

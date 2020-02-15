@@ -1,6 +1,6 @@
 <template>
     <div class="backstage row">
-        <Aside></Aside>
+        <!-- <Aside></Aside> -->
         <div class="main">
             <EditAlbum v-if="$store.state.aside === 'album' ? true : false"></EditAlbum>
             <EditTopic v-if="$store.state.aside === 'topic' ? true : false"></EditTopic>
@@ -11,7 +11,7 @@
 
 <script>
     import imMiment from 'miment'
-    import imCorvus from '@/npm/corvus/corvus.js'
+    import imCorvus from '@/common/js/corvus/corvus.js'
 
     import Aside from '@/components/aside'
     import EditAlbum from '@/page/backstage/edit-album'
@@ -31,9 +31,11 @@
 
             }
         },
-        mounted: function () {
 
+        mounted: function () {
+            this.$store.commit('menuSetIndex', 99)
         },
+
         methods: {
 
         },
@@ -41,29 +43,8 @@
 </script>
     
 <style>
-    .aside {
-        width: 120px;
-        border: 1px red solid;
-    }
-
-    .main {
-        width: 100%;
-    }
-
-    li {
-        list-style-type: none;
-    }
-    
-    .edit {
-        width: 80%;
-    }
-    
-    .edit-range-title {
-        white-space:nowrap;
-    }
-    
-    .edit-range-content {
-        min-height: 600px;
-        border: 1px #808080 solid;
+    .backstage {
+        min-height: 720px;
+        background: #ffffff;
     }
 </style>

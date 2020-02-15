@@ -1,47 +1,36 @@
 .fs-s {
-    font-size: 20px;
+    font-size: 12px;
+    letter-spacing: 4px;
 }
 
 .fs-m {
-    font-size: 28px;
+    font-size: 16px;
+    letter-spacing: 4px;
 }
 
 .fs-l {
-    font-size: 36px;
+    font-size: 20px;
+    letter-spacing: 4px;
 }
 
 .fs-x {
-    font-size: 44px;
+    font-size: 24px;
+    letter-spacing: 4px;
 }
 
 .fs-xl {
-    font-size: 60px;
+    font-size: 28px;
+    letter-spacing: 4px;
 }
 
-.fs-xxl {
-    font-size: 100px;
+.fc-default {
+    color: #40403d;
 }
 
-.fs-xxxl {
-    font-size: 160px;
+.fc-white {
+    color: #f4f4f0;
 }
 
-.fc-brand {
-    color: #fff;
-}
-
-.fc-success {
-    color: #fff;
-}
-
-.fc-warning {
-    color: #fff;
-}
-
-.fc-danger {
-    color: #fff;
-}
-
-.fc-info {
-    color: #fff;
+.fs-date {
+    letter-spacing: 0 !important;
 }

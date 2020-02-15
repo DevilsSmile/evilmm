@@ -15,7 +15,7 @@
 
 <script>
     import imMiment from 'miment'
-    import imCorvus from '@/npm/corvus/corvus.js'
+    import imCorvus from '@/common/js/corvus/corvus.js'
 
     import Aside from '@/components/aside'
     

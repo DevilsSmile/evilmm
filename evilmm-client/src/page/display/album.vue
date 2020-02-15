@@ -1,25 +1,28 @@
 <template>
     <div class="album">
-        <div v-for="item in album" v-bind:key="item.id">
-            <img class="image tt" v-bind:src="item.url" alt="">
+        <div class="album-row row con-b align-c" v-for="(row, index) in album" v-bind:key="index">
+            <div class="album-item" v-for="item in row" v-bind:key="item.id">
+                <img class="image" v-bind:src="item.url + sizeSmall" alt="">
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import imMiment from 'miment'
-    import imCorvus from '@/npm/corvus/corvus.js'
+    import imCorvus from '@/common/js/corvus/corvus.js'
     
     export default {
         name: 'Album',
         data: function () {
             return {
                 album: [],
+                sizeSmall: '?imageView2/3/w/280/h/290',
+                sizeLarge: '?imageView2/2/w/2220/h/2300',
             }
         },
-        
+
         mounted: function () {
-            console.log('album mounted')
             this.queryAlbum()
         },
         
@@ -32,18 +35,32 @@
              */
             queryAlbum: function () {
                 let This = this
-                console.log('topics queryTopics')
                 imCorvus({
                     url: 'album/queryAlbum', 
                     data: JSON.stringify({ 
                         index: 0,
-                        number: 6
+                        number: 8
                     })
                 })
                 .then(function (funResult) {
-                    console.log(funResult)
                     let funResultData = JSON.parse(funResult)
-                    This.album = funResultData.data
+
+                    if (funResultData.data === 0) {
+                        This.album = []
+                    } else {
+                        let funImageRow = []
+                        for (let i = 0, len = funResultData.data.length; i < len; i++) {
+                            funImageRow.push(funResultData.data[i])
+                            if (funImageRow.length === 4) {
+                                This.album.push(funImageRow)
+                                funImageRow = []
+                            }
+                        }
+
+                        if (funImageRow.length > 0) {
+                            This.album.push(funImageRow)
+                        }
+                    }
                 })
                 .catch(function (funError) {
                     console.log('funError', funError)
@@ -55,33 +72,18 @@
                 if (this.$route.path !== '/topics/content/' + event) {
                     this.$router.push('/topics/content/' + event)
                 }
-                console.log(event, this.$route.path)
             },
         },
     }
 </script>
     
 <style>
-    li {
-        display: inline-block;
-        list-style-type: none;
-    }
-    
-    .edit {
-        width: 80%;
-    }
-    
-    .edit-range-title {
-        white-space:nowrap;
-    }
-    
-    .edit-range-content {
-        min-height: 600px;
-        border: 1px #808080 solid;
+    .album {
+        min-height: 720px;
+        background: #ffffff;
     }
 
-    .image {
-        width: 200px;
-        height: 200px;
+    .album-row {
+        padding: 0 64px;
     }
 </style>

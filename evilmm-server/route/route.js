@@ -5,6 +5,7 @@
  */
 const imApiAlbum = require('../api/album.js')
 const imApiTopic = require('../api/topic.js')
+const imApiRecord = require('../api/record.js')
 const imApiMember = require('../api/member.js')
 
 /** 
@@ -16,10 +17,14 @@ const imApiMember = require('../api/member.js')
 let routeHandle = {
     ['/user/isrepeatusername']: imApiMember.isRepeatUserName,
     ['/user/selectuserinfo']: imApiMember.selectUserInfo,
-    
+
     ['/topic/queryTopics']: imApiTopic.queryTopics,
     ['/topic/queryTopicInfo']: imApiTopic.queryTopicInfo,
     ['/topic/insertTopicInfo']: imApiTopic.insertTopicInfo,
+
+    ['/record/queryRecord']: imApiRecord.queryRecord,
+    ['/record/queryRecordInfo']: imApiRecord.queryRecordInfo,
+    ['/record/insertRecordInfo']: imApiRecord.insertRecordInfo,
 
     ['/album/queryAlbum']: imApiAlbum.queryAlbum,
     ['/album/insertAlbumImage']: imApiAlbum.insertAlbumImage,

@@ -1,16 +1,16 @@
 <template>
-    <div class="topic">
-        <div class="topic-info">
+    <div class="record">
+        <div class="record-info">
             <div>
-                <div class="topic-info-title">
-                    <h2 class="fs-xl fc-default">{{topicInfo.title}}</h2>
+                <div class="record-info-title">
+                    <h2 class="fs-xl fc-default">{{recordInfo.title}}</h2>
                 </div>
-                <div class="topic-info-other">
-                    <span class="fs-s fc-default fs-date">{{topicInfo.time}}</span>
-                    <span class="fs-s fc-default">{{topicInfo.agree}}</span>
-                    <span class="fs-s fc-default">{{topicInfo.browse}}</span>
+                <div class="record-info-other">
+                    <span class="fs-s fc-default fs-date">{{recordInfo.time}}</span>
+                    <span class="fs-s fc-default">{{recordInfo.agree}}</span>
+                    <span class="fs-s fc-default">{{recordInfo.browse}}</span>
                 </div>
-                <div class="topic-content" v-html='topicInfo.content'></div>
+                <div class="record-content" v-html='recordInfo.content'></div>
             </div>
         </div>
     </div>
@@ -21,27 +21,27 @@
     import imCorvus from '@/common/js/corvus/corvus.js'
     
     export default {
-        name: 'TopicInfo',
+        name: 'RecordInfo',
         data: function () {
             return {
-                topicInfo: {}
+                recordInfo: {}
             }
         },
 
         mounted: function () {
             let This = this
-            let funRegExp = new RegExp('(?<=\/topic\/info\/)[A-Za-z0-9]+')
+            let funRegExp = new RegExp('(?<=\/record\/info\/)[A-Za-z0-9]+')
             let funResult = this.$route.path.toString().match(funRegExp)
             console.log('id', funResult[0])
             
             imCorvus({
-                url: 'topic/queryTopicInfo', 
+                url: 'record/queryRecordInfo', 
                 data: JSON.stringify({
                     id: funResult[0]
                 })
             })
             .then(function (funResult) {
-                This.topicInfo = JSON.parse(funResult).data[0]
+                This.recordInfo = JSON.parse(funResult).data[0]
                 console.log('funResult', funResult)
             })
             .catch(function (funError) {
@@ -56,7 +56,7 @@
              *  @param {string} paramUpdateInfo - { "name": xx, "avatar": xx, "password": xx }
              *  @returns {string}
              */
-            queryTopicContent: function () {
+            queryRecordContent: function () {
 
             },
         },
@@ -64,39 +64,39 @@
 </script>
     
 <style>
-    .topic-info {
+    .record-info {
         padding: 0 212px;
         background: #ffffff;
     }
 
-    .topic-info > div {
+    .record-info > div {
         width: 856px;
         min-height: 720px;
     }
 
-    .topic-info-other {
+    .record-info-other {
         margin-top: 8px;
         margin-bottom: 32px;
         padding-bottom: 8px;
         border-bottom: 2px #f0f0f0 solid;
     }
 
-    .topic-list > div {
+    .record-list > div {
         width: 856px;
         height: 192px;
         padding: 32px;
         background: #d6e5e3;
     }
 
-    .topic-title {
+    .record-title {
         margin-bottom: 4px;
     }
 
-    .topic-info {
+    .record-info {
         margin-bottom: 12px;
     }
     
-    .topic-content p {
+    .record-content p {
         line-height: 18px;
     }
 </style>

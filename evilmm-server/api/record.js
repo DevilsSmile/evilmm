@@ -27,13 +27,13 @@ const output = {
     },
     
     /**
-     *  添加话题详细信息
+     *  添加记录详细信息
      *  @function
      *  @param {string} funRequestData
      *  @param {object} funResponse
      *  @returns
      */
-    insertTopicInfo: function (funRequestData, funResponse) {
+    insertRecordInfo: function (funRequestData, funResponse) {
         function saveTopicInfo (funTopicId) {
             funTopicInfo = JSON.parse(funRequestData)
             funTopicInfo.id = funTopicId
@@ -62,7 +62,7 @@ const output = {
     },
 
     /**
-     *  更新日志信息。
+     *  更新记录信息
      *  @function
      *  @param {string} paramUpdateInfo - { "name": xx, "avatar": xx, "password": xx }
      *  @returns {boolean}
@@ -72,30 +72,30 @@ const output = {
     },
 
     /**
-     *  查询话题列表
+     *  查询记录列表
      *  @function
      *  @param {string} funRequestData
      *  @param {object} funResponse
      *  @returns
      */
-    queryTopics: function (funRequestData, funResponse) {        
+    queryRecord: function (funRequestData, funResponse) {
         let funDataBase = imDataBase.createConnection
         
-        // 日志分类 category = 0
-        let funQuery = 'SELECT id, time, title, abstract, category FROM evilmm.topics WHERE category = 0;'
+        // 记录分类 category > 0
+        let funQuery = 'SELECT id, time, title, abstract, category FROM evilmm.topics WHERE category > 0;'
         funDataBase.query(funQuery, function (funError, funResult) {
             imResponse(funResponse, 20050, 'text', funResult)
         })
     },
     
     /**
-     *  查询话题详细信息
+     *  查询记录详细信息
      *  @function
      *  @param {string} funRequestData
      *  @param {object} funResponse
      *  @returns
      */
-    queryTopicInfo: function (funRequestData, funResponse) {
+    queryRecordInfo: function (funRequestData, funResponse) {
         let funRequestParam = JSON.parse(funRequestData)
         
         let funDataBase = imDataBase.createConnection
