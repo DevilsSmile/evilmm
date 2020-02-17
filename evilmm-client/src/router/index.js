@@ -55,5 +55,6 @@ export default new Router({
             name: 'Unknown',
             component: Unknown,
         }, 
-    ]
+    ],
+    mode: 'history'
 })

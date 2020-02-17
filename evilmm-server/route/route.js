@@ -3,10 +3,17 @@
  * @module route
  * @see route.js
  */
-const imApiAlbum = require('../api/album.js')
-const imApiTopic = require('../api/topic.js')
-const imApiRecord = require('../api/record.js')
-const imApiMember = require('../api/member.js')
+const imPath = require('path')
+const imFileSystem = require('fs')
+const imUrlType = require('./url.js')
+
+const imApiHome = require('../api/home.js')                     // 主页
+const imApiAlbum = require('../api/album.js')                   // 相册
+const imApiTopic = require('../api/topic.js')                   // 话题
+const imApiRecord = require('../api/record.js')                 // 记录
+const imApiMember = require('../api/member.js')                 // 成员
+
+const imResponse = require('../database/response/index.js')
 
 /** 
  *  请求路径与响应处理函数的匹配对象。
@@ -15,8 +22,7 @@ const imApiMember = require('../api/member.js')
  *  @type {object}
  */
 let routeHandle = {
-    ['/user/isrepeatusername']: imApiMember.isRepeatUserName,
-    ['/user/selectuserinfo']: imApiMember.selectUserInfo,
+    ['/']: imApiHome.returnHtml,
 
     ['/topic/queryTopics']: imApiTopic.queryTopics,
     ['/topic/queryTopicInfo']: imApiTopic.queryTopicInfo,
@@ -31,44 +37,71 @@ let routeHandle = {
 }
 
 /**
- *  请求统一处理函数。
- *      1，对请求合法性做校验，检验token，请求来源，以及其他加密验证信息。
- *      2，对合法的请求
- *      允许修改属性：名称，头像，密码。
+ *  根据 http 携带的信息执行对应逻辑
+ *      分析 url 判断本次请求目的
+ *      接收 body 中的数据
  *  @function
  *  @param {object} funRequest
  *  @param {object} funResponse
- *  @param {string} funPathname
  *  @returns
  */
-let Modular = function route(funRequest, funResponse, funPathname) {
-    if (typeof routeHandle[funPathname] === 'function') {
-        let funRequestData = ''
-        /**
-         *  请求数据接收事件。
-         *      把所有请求发送过来的二进制数据拼接，最终得到完整的数据。
-         *  @event route#data
-         *  @type {function}
-         */
-        funRequest.on('data', function (funBinary) {
-            funRequestData = funRequestData + funBinary.toString()
-        })
-        
-        /**
-         *  请求数据接收结束事件。
-         *      只有数据被完整接收时，才会将数据分发给特定的函数处理。
-         *  @event route#data
-         *  @type {function}
-         */
-        funRequest.on('end', function () {
-            // console.log('■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■')
-            // console.log(funRequestData)
-            routeHandle[funPathname](funRequestData, funResponse);
-        })
-    } else {
-        funResponse.writeHead(200, {'Content-Type': 'text/plain'})
-        funResponse.write('404')
-        funResponse.end();
+let Modular = function route(funRequest, funResponse, funRootPath) {
+    let funUrlInfo = imUrlType('https://user:password@sub.example.com:80' + funRequest.url)
+    switch (funUrlInfo.type) {
+        case 'file':
+            console.log(imPath.join(funRootPath + funUrlInfo.filePath))
+            imFileSystem.readFile(imPath.join(funRootPath + funUrlInfo.filePath), function (funError, funData) {
+                if (funError) {
+                    console.log('read error')
+                    imResponse(funResponse, 20058, 'text', 404)
+                } else {
+                    console.log('read success')
+                    imResponse(funResponse, 20050, funUrlInfo.fileType, funData)
+                }
+            })
+            console.log(funUrlInfo)
+            break
+
+        case 'function':
+            if (typeof routeHandle[funUrlInfo.apiPath] === 'function') {
+                switch (funRequest.method) {
+                    case 'GET':
+                        console.log('function get')
+                        console.log(funUrlInfo)
+                        routeHandle[funUrlInfo.apiPath](funUrlInfo.apiParam, funResponse)
+                        break
+
+                    case 'POST':
+                        let funRequestData = ''
+                        /**
+                         *  接收 http 数据
+                         *  拼接二进制数据以得到完整的数据
+                         *  @event route#data
+                         *  @type {function}
+                         */
+                        funRequest.on('data', function (funBinary) {
+                            funRequestData = funRequestData + funBinary.toString()
+                        })
+                    
+                        /**
+                         *  数据接收完成事件
+                         *  接收完整数据后进一步分析 url 以执行对应操作
+                         *  @event route#data
+                         *  @type {function}
+                         */
+                        funRequest.on('end', function () {
+                            console.log('function post')
+                            console.log(funUrlInfo)
+                            routeHandle[funUrlInfo.apiPath](funRequestData, funResponse)
+                        })
+                        break
+                }
+            }
+            break
+
+        default:
+            imResponse(funResponse, 20058, 'text', 404)
+            break
     }
 }
 

@@ -48,71 +48,26 @@
         <div class="home-dictum row con-c align-c">
             <span class="fs-s fc-default">羡君之心　至死方休</span>
         </div>
-
-        <!-- <div class="home-album">
-            <div class="row con-b align-c">
-                <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/album-1.png" alt="">
-                <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/album-2.png" alt="">
-            </div>
-            <div class="row con-b align-c">
-                <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/album-3.png" alt="">
-                <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/album-4.png" alt="">
-            </div>
-        </div> -->
     </div>
 </template>
 
 <script>
-    import imMiment from 'miment'
     import imCorvus from '@/common/js/corvus/corvus.js'
     
     export default {
-        name: 'EditArticle',
+        name: 'Home',
         data: function () {
             return {
-                topics: []
+
             }
+        },
+
+        mounted: function () {
+            console.log('home')
         },
         
         methods: {
-            handleInputContent: function(funEvent) {
-                this.content = funEvent.target.innerHTML
-            },
             
-            /**
-             *  获取日志列表。
-             *  @function
-             *  @param {string} paramUpdateInfo - { "name": xx, "avatar": xx, "password": xx }
-             *  @returns {string}
-             */
-            queryTopics: function () {
-                let This = this
-                console.log('topics queryTopics')
-                imCorvus.init({
-                    baseURL: 'http://127.0.0.1:8888/'
-                })
-                imCorvus.request({
-                    url: 'topics/queryTopics',
-                    data: {
-                        page: 0
-                    }
-                })
-                .then(function (funResult) {
-                    let funResponse = JSON.parse(funResult)
-                    This.topics = funResponse.data
-                })
-                .catch(function (funError) {
-                    console.log('funError', funError)
-                })
-            },
-            
-            queryTopicContent: function (event) {
-                // 防止添加重复路由而产生的错误
-                if (this.$route.path !== '/topics/content/' + event) {
-                    this.$router.push('/topics/content/' + event)
-                }
-                console.log(event, this.$route.path)
-            },
         },
     }
 </script>
@@ -171,15 +126,5 @@
 
     .home-dictum {
         height: 192px;
-    }
-
-    .home-album {
-        padding: 0 64px 88px 64px;
-    }
-
-    .home-album div {
-        width: 1152px;
-        height: 348px;
-        margin-top: 32px;
     }
 </style>

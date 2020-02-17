@@ -78,7 +78,8 @@ const output = {
      *  @param {object} funResponse
      *  @returns
      */
-    queryTopics: function (funRequestData, funResponse) {        
+    queryTopics: function (funRequestData, funResponse) {
+        console.log('queryTopics')
         let funDataBase = imDataBase.createConnection
         
         // 日志分类 category = 0

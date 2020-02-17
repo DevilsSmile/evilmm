@@ -19,11 +19,16 @@ const imHeader = require('./header.js')
  */
 const output = function (funResponse, funCode, funType, funData) {
     imHeader(funResponse, funType)
-    
-    let funResultData = imState(funCode)
-    funResultData.data = funData
-    funResponse.write(JSON.stringify(funResultData)) 
-    funResponse.end()
+
+    if (funType === 'text') {
+        let funResultData = imState(funCode)
+        funResultData.data = funData
+        funResponse.write(JSON.stringify(funResultData))
+        funResponse.end()
+    } else {
+        funResponse.write(funData.toString())
+        funResponse.end()
+    }
 }
 
 module.exports = output

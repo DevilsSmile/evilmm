@@ -11,6 +11,26 @@ const output = function (funResponse, funType) {
         'Access-Control-Allow-Credentials': 'true'
     }
     switch (funType) {
+        case 'js':
+            funHeader['Content-Type'] = 'application/javascript'
+            break
+            
+        case 'ico':
+            funHeader['Content-Type'] = 'image/webp'
+            break
+    
+        case 'map':
+            funHeader['Content-Type'] = '*/*'
+            break
+    
+        case 'css':
+            funHeader['Content-Type'] = 'text/css'
+            break
+
+        case 'html':
+            funHeader['Content-Type'] = 'text/html'
+            break
+            
         case 'text':
             funHeader['Content-Type'] = 'text/plain'
             break
