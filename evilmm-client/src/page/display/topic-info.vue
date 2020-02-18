@@ -1,14 +1,14 @@
 <template>
-    <div class="topic">
+    <div class="topic" ref="top">
         <div class="topic-info">
             <div>
                 <div class="topic-info-title">
                     <h2 class="fs-xl fc-default">{{topicInfo.title}}</h2>
                 </div>
-                <div class="topic-info-other">
-                    <span class="fs-s fc-default fs-date">{{topicInfo.time}}</span>
-                    <span class="fs-s fc-default">{{topicInfo.agree}}</span>
-                    <span class="fs-s fc-default">{{topicInfo.browse}}</span>
+                <div class="topic-info-other row align-c">
+                    <span class="fs-s fc-default fs-date">发布时间：{{topicInfo.time}}</span>
+                    <!-- <span class="fs-s fc-default fs-date">喜欢：{{topicInfo.agree}}</span>
+                    <span class="fs-s fc-default fs-date">浏览：{{topicInfo.browse}}</span> -->
                 </div>
                 <div class="topic-content" v-html='topicInfo.content'></div>
             </div>
@@ -29,10 +29,12 @@
         },
 
         mounted: function () {
+            this.$store.commit('menuSetIndex', 2)                   // 设置菜单
+            this.$refs.top.scrollTop = 0                            // 设置滚动条顶部
+
             let This = this
             let funRegExp = new RegExp('(?<=\/topic\/info\/)[A-Za-z0-9]+')
             let funResult = this.$route.path.toString().match(funRegExp)
-            console.log('id', funResult[0])
             
             imCorvus({
                 url: 'topic/queryTopicInfo', 
@@ -42,7 +44,6 @@
             })
             .then(function (funResult) {
                 This.topicInfo = JSON.parse(funResult).data[0]
-                console.log('funResult', funResult)
             })
             .catch(function (funError) {
                 console.log('funError', funError)
@@ -81,6 +82,10 @@
         border-bottom: 2px #f0f0f0 solid;
     }
 
+    .topic-info-other span {
+        margin-right: 16px
+    }
+
     .topic-list > div {
         width: 856px;
         height: 192px;
@@ -93,10 +98,14 @@
     }
 
     .topic-info {
-        margin-bottom: 12px;
+        padding-bottom: 60px;
     }
     
     .topic-content p {
-        line-height: 18px;
+        color: #40403d;
+        margin-bottom: 24px;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 4px;
     }
 </style>

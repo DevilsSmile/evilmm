@@ -1,7 +1,7 @@
 <template>
     <div class="edit-album row">
         <input accept="image/png,image/jpeg,image/gif,image/jpg,txt" name="img" id="upload_file" type="file" v-on:change="eventUploadImageBase64">
-        <button v-on:click="eventUploadImageFormData">上传图片</button>
+        <!-- <button v-on:click="eventUploadImageFormData">上传图片</button> -->
     </div>
 </template>
 
@@ -36,9 +36,10 @@
                 var funFileReader = new FileReader()
                 funFileReader.readAsDataURL(funFile)
                 funFileReader.onload = function () {
-                    
+                    console.log('upload up')
                     imCorvus({
                         url: 'album/insertAlbumImage',
+                        method: 'post',
                         data: this.result
                     })
                     .then(function (funResult) {

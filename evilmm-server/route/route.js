@@ -22,8 +22,6 @@ const imResponse = require('../database/response/index.js')
  *  @type {object}
  */
 let routeHandle = {
-    ['/']: imApiHome.returnHtml,
-
     ['/topic/queryTopics']: imApiTopic.queryTopics,
     ['/topic/queryTopicInfo']: imApiTopic.queryTopicInfo,
     ['/topic/insertTopicInfo']: imApiTopic.insertTopicInfo,
@@ -49,25 +47,19 @@ let Modular = function route(funRequest, funResponse, funRootPath) {
     let funUrlInfo = imUrlType('https://user:password@sub.example.com:80' + funRequest.url)
     switch (funUrlInfo.type) {
         case 'file':
-            console.log(imPath.join(funRootPath + funUrlInfo.filePath))
             imFileSystem.readFile(imPath.join(funRootPath + funUrlInfo.filePath), function (funError, funData) {
                 if (funError) {
-                    console.log('read error')
                     imResponse(funResponse, 20058, 'text', 404)
                 } else {
-                    console.log('read success')
                     imResponse(funResponse, 20050, funUrlInfo.fileType, funData)
                 }
             })
-            console.log(funUrlInfo)
             break
 
         case 'function':
             if (typeof routeHandle[funUrlInfo.apiPath] === 'function') {
                 switch (funRequest.method) {
                     case 'GET':
-                        console.log('function get')
-                        console.log(funUrlInfo)
                         routeHandle[funUrlInfo.apiPath](funUrlInfo.apiParam, funResponse)
                         break
 
@@ -90,8 +82,6 @@ let Modular = function route(funRequest, funResponse, funRootPath) {
                          *  @type {function}
                          */
                         funRequest.on('end', function () {
-                            console.log('function post')
-                            console.log(funUrlInfo)
                             routeHandle[funUrlInfo.apiPath](funRequestData, funResponse)
                         })
                         break

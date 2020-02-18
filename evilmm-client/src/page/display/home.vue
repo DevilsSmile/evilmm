@@ -11,7 +11,7 @@
                     <h2 class="fs-x fc-default">独行的灵魂</h2>
                     <span class="fs-m fc-default">一路走来　聚少离多　我们总是有各自要去的地方</span>
                     <span class="fs-m fc-default">我想　是在寻找内心深处的真实</span>
-                    <span class="fs-m fc-default">全文</span>
+                    <span class="home-topic-info-more fs-m" v-on:click="eventQueryTopicInfo('85799290361970688')">全文</span>
                 </div>
                 <div class="home-topic-info-cover row con-e align-c">
                     <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/cover-1.png" alt="">
@@ -27,7 +27,7 @@
                     <span class="fs-m fc-default">在空荡荡的空间里　他静静的看向别处　若有所思</span>
                     <span class="fs-m fc-default">而我　静静的看着他　若有所感</span>
                     <span class="fs-m fc-default">灵魂深处的纠结在他的领悟里淡化　释然</span>
-                    <span class="fs-m fc-default">全文</span>
+                    <span class="home-topic-info-more fs-m" v-on:click="eventQueryTopicInfo('85788845001506816')">全文</span>
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
                     <span class="fs-m fc-default">如今　想必已经开花了吧</span>
                     <span class="fs-m fc-default">花开的盛景　早已印于我心　何须多此一行　成全一时执念呢</span>
                     <span class="fs-m fc-default">我记得　至今不忘</span>
-                    <span class="fs-m fc-default">全文</span>
+                    <span class="home-topic-info-more fs-m" v-on:click="eventQueryTopicInfo('85854025425190912')">全文</span>
                 </div>
                 <div class="home-topic-info-cover row align-c">
                     <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/cover-3.png" alt="">
@@ -63,11 +63,13 @@
         },
 
         mounted: function () {
-            console.log('home')
+            this.$store.commit('menuSetIndex', 0)
         },
         
         methods: {
-            
+            eventQueryTopicInfo: function (event) {
+                this.$router.push('/topic/info/' + event)
+            }
         },
     }
 </script>
@@ -122,6 +124,12 @@
 
     .home-topic-info-content h2 {
         margin-bottom: 34px;
+    }
+
+    .home-topic-info-more {
+        padding-left: 4px;
+        color: #bfbfb6;
+        background: #40403d;
     }
 
     .home-dictum {

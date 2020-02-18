@@ -32,7 +32,6 @@
             let This = this
             let funRegExp = new RegExp('(?<=\/record\/info\/)[A-Za-z0-9]+')
             let funResult = this.$route.path.toString().match(funRegExp)
-            console.log('id', funResult[0])
             
             imCorvus({
                 url: 'record/queryRecordInfo', 
@@ -42,7 +41,6 @@
             })
             .then(function (funResult) {
                 This.recordInfo = JSON.parse(funResult).data[0]
-                console.log('funResult', funResult)
             })
             .catch(function (funError) {
                 console.log('funError', funError)

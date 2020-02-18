@@ -54,12 +54,8 @@
                     this.$router.push(this.menu[funIndex].path)
                     if (this.menu[funIndex].path === '/') {
                         this.$store.commit('menuSetIndex', funIndex)
-                        console.log('funIndex', funIndex)
-                        console.log(this.$store.state.menu.isHome)
                     } else {
                         this.$store.commit('menuSetIndex', funIndex)
-                        console.log('funIndex', funIndex)
-                        console.log(this.$store.state.menu.isHome)
                     }
                 }
             },

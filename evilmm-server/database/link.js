@@ -10,7 +10,8 @@ let funCreateConnection = (function () {
         host     : 'localhost',
         user     : 'root',
         password : 'evilmmdfjm0327',
-        database : 'evilmm'
+        database : 'evilmm',
+        useConnectionPooling: true,
     })
     
     funDataBase.connect(function (funError) {

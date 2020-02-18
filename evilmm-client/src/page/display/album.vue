@@ -39,7 +39,7 @@
                     url: 'album/queryAlbum', 
                     data: JSON.stringify({ 
                         index: 0,
-                        number: 8
+                        number: 12
                     })
                 })
                 .then(function (funResult) {
@@ -80,10 +80,12 @@
 <style>
     .album {
         min-height: 720px;
+        padding-bottom: 60px;
         background: #ffffff;
     }
 
     .album-row {
         padding: 0 64px;
+        margin-bottom: 6px;
     }
 </style>

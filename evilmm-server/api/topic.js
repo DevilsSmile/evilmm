@@ -79,12 +79,16 @@ const output = {
      *  @returns
      */
     queryTopics: function (funRequestData, funResponse) {
-        console.log('queryTopics')
         let funDataBase = imDataBase.createConnection
         
         // 日志分类 category = 0
         let funQuery = 'SELECT id, time, title, abstract, category FROM evilmm.topics WHERE category = 0;'
         funDataBase.query(funQuery, function (funError, funResult) {
+            for (let i = 0, len = funResult.length; i < len; i++) {
+                let funDate = new Date(funResult[i].time.toString())
+                funResult[i].time = funDate.getFullYear() + '-' + (funDate.getMonth() + 1) + '-' + funDate.getDate()
+                funResult[i].time = funResult[i].time + '  ' + funDate.getHours() + ':' + funDate.getMinutes() + ':' + funDate.getSeconds()
+            }
             imResponse(funResponse, 20050, 'text', funResult)
         })
     },
@@ -102,6 +106,11 @@ const output = {
         let funDataBase = imDataBase.createConnection
         let funQuery = 'SELECT * FROM evilmm.topics WHERE id = ' + funRequestParam.id + ';'
         funDataBase.query(funQuery, function (funError, funResult) {
+            for (let i = 0, len = funResult.length; i < len; i++) {
+                let funDate = new Date(funResult[i].time.toString())
+                funResult[i].time = funDate.getFullYear() + '-' + (funDate.getMonth() + 1) + '-' + funDate.getDate()
+                funResult[i].time = funResult[i].time + '  ' + funDate.getHours() + ':' + funDate.getMinutes() + ':' + funDate.getSeconds()
+            }
             imResponse(funResponse, 20050, 'text', funResult)
         })
     },

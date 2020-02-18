@@ -1,7 +1,7 @@
 <template>
     <div class="backstage row">
-        <!-- <Aside></Aside> -->
-        <div class="main">
+        <Aside></Aside>
+        <div class="backstage-main">
             <EditAlbum v-if="$store.state.aside === 'album' ? true : false"></EditAlbum>
             <EditTopic v-if="$store.state.aside === 'topic' ? true : false"></EditTopic>
             <EditRecord v-if="$store.state.aside === 'record' ? true : false"></EditRecord>
@@ -43,7 +43,8 @@
 </script>
     
 <style>
-    .backstage {
+    .backstage-main {
+        width: 1120px;
         min-height: 720px;
         background: #ffffff;
     }

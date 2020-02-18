@@ -97,6 +97,7 @@
                     data: JSON.stringify({
                         time: imMiment().format('YYYY-MM-DD hh:mm:ss'),
                         title: this.title,
+                        abstract: '',
                         content: funResult,
                     })
                 })

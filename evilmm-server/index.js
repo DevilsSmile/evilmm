@@ -2,6 +2,7 @@ let imHttp = require('http')
 let imRoute = require('./route/route.js')
 
 let funServerIP = '192.168.1.2'
+// let funServerIP = '172.17.0.4'                  // 服务器ip
 let funServerPort = 80
 let funServer = imHttp.createServer()
 
@@ -24,4 +25,5 @@ funServer.on('request', function (funRequest, funResponse) {
  *  @returns
  */
 funServer.listen(funServerPort, funServerIP)
+console.clear()
 console.log('server has started...')

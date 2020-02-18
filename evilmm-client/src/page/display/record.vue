@@ -13,6 +13,10 @@
                 </div>
             </div>
         </div>
+        <div class="records-nothing col align-c" v-if="isRecord">
+            <span>还没想好怎么写···</span>
+            <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/404.png" alt="">
+        </div>
     </div>
 </template>
 
@@ -24,7 +28,8 @@
         name: 'RecordList',
         data: function () {
             return {
-                record: []
+                record: [],
+                isRecord: false,
             }
         },
         
@@ -54,6 +59,11 @@
                 .then(function (funResult) {
                     let funResultData = JSON.parse(funResult)
                     This.record = funResultData.data
+                    if (This.record.length === 0) {
+                        This.isRecord = true
+                    } else {
+                        This.isRecord = false
+                    }
                 })
                 .catch(function (funError) {
                     console.log('funError', funError)
@@ -91,6 +101,15 @@
         margin-bottom: 32px;
         padding: 32px;
         background: #d6e5e3;
+    }
+
+    .records-nothing {
+        margin-top: 176px;
+    }
+
+    .records-nothing span {
+        font-size: 60px;
+        letter-spacing: 20px;
     }
 
     .records-title {

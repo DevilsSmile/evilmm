@@ -36,16 +36,12 @@
 <style>
     .aside {
         width: 160px;
-        background: #f4f4f4;
+        background: #ffffff;
     }
 
     li {
         display: inline-block;
         list-style-type: none;
         margin: 0 15px;
-    }
-
-    ul {
-        height: 70px;
     }
 </style>

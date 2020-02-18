@@ -11,6 +11,7 @@ import Topic from '@/page/display/topic'
 import TopicInfo from '@/page/display/topic-info'
 import Record from '@/page/display/record'
 import RecordInfo from '@/page/display/record-info'
+import About from '@/page/display/About'
 
 // 后台
 import Backstage from '@/page/backstage/backstage'
@@ -26,6 +27,10 @@ export default new Router({
             path: '/',
             name: 'Home',
             component: Home,
+        }, {
+            path: '/about',
+            name: 'About',
+            component: About
         }, {
             path: '/album',
             name: ' Album',

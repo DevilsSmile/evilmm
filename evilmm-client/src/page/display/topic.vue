@@ -29,6 +29,7 @@
         },
 
         mounted: function () {
+            this.$store.commit('menuSetIndex', 2)
             this.queryTopics()
         },
         
