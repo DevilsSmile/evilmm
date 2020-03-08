@@ -84,6 +84,7 @@ const output = {
         // 日志分类 category = 0
         let funQuery = 'SELECT id, time, title, abstract, category FROM evilmm.topics WHERE category = 0;'
         funDataBase.query(funQuery, function (funError, funResult) {
+            console.log('funResult', funResult)
             for (let i = 0, len = funResult.length; i < len; i++) {
                 let funDate = new Date(funResult[i].time.toString())
                 funResult[i].time = funDate.getFullYear() + '-' + (funDate.getMonth() + 1) + '-' + funDate.getDate()

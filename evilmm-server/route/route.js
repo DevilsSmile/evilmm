@@ -43,8 +43,19 @@ let routeHandle = {
  *  @param {object} funResponse
  *  @returns
  */
-let Modular = function route(funRequest, funResponse, funRootPath) {
-    let funUrlInfo = imUrlType('https://user:password@sub.example.com:80' + funRequest.url)
+let output = function route(funRequest, funResponse, funRootPath) {
+    function isValidUrl (funUrl) {
+        let funRegExp = new RegExp('^((http|https)://)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(/[a-zA-Z0-9\&%_\./-~-]*)?')
+        return funRegExp.test(funUrl)
+    }
+
+    // console.log(funRequest.url)
+    if (isValidUrl('https://user:password@sub.example.com:80' + funRequest.url)) {
+        funUrlInfo = imUrlType(funRequest.url)
+    } else {
+        imResponse(funResponse, 20058, 'text', 404)
+    }
+    
     switch (funUrlInfo.type) {
         case 'file':
             imFileSystem.readFile(imPath.join(funRootPath + funUrlInfo.filePath), function (funError, funData) {
@@ -86,6 +97,14 @@ let Modular = function route(funRequest, funResponse, funRootPath) {
                         })
                         break
                 }
+            } else {
+                imFileSystem.readFile(imPath.join(funRootPath + '/html/index.html'), function (funError, funData) {
+                    if (funError) {
+                        imResponse(funResponse, 20058, 'text', 404)
+                    } else {
+                        imResponse(funResponse, 20050, 'html', funData)
+                    }
+                })
             }
             break
 
@@ -95,4 +114,4 @@ let Modular = function route(funRequest, funResponse, funRootPath) {
     }
 }
 
-module.exports = Modular
+module.exports = output

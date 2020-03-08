@@ -4,6 +4,7 @@
             <span class="footer-info-dictum fs-l fc-white">记录过往　莫失莫忘</span>
             <span class="fs-s fc-white">地址：厦门湖里区</span>
             <span class="fs-s fc-white">邮箱：evilmm@foxmail.com</span>
+            <span class="fs-s fc-white">备案：闽ICP备20002723</span>
         </div>
         <div class="row con-c align-c">
             <img src="https://image-1256588539.cos.ap-shanghai.myqcloud.com/home/sign-footer.png" alt="" v-on:click="eventSignInBackstage">

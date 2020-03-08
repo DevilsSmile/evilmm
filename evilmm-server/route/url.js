@@ -14,6 +14,7 @@ let imUrl = require('url')
 let resourcesPath = '/html'
 
 let output = function (funUrl) {
+    funUrl = 'https://user:password@sub.example.com:80' + funUrl
     let funUrlComponent = new imUrl.URL(funUrl)
     let funReturn = {
         type: '',
@@ -29,7 +30,6 @@ let output = function (funUrl) {
         // 1.
         // url 为网站主页地址
         // 需要返回主页 html 文件并且设置对应的 response headers
-        // console.log('1.')
         funReturn.type = 'file'
         funReturn.fileName = 'index.html'
         funReturn.fileType = 'html'
@@ -46,7 +46,6 @@ let output = function (funUrl) {
         // url 为不带参数的接口请求
         // 执行对应的接口函数
         if (funResult === null) {
-            // console.log('2.')
             funReturn.type = 'function'
             funReturn.apiPath = funUrlComponent.pathname
             return funReturn
@@ -56,7 +55,6 @@ let output = function (funUrl) {
         // url 为文件请求
         // 需要根据请求文件的类型设置对应的 response headers
         if (funResult !== null) {
-            // console.log('3.')
             funRegExp = new RegExp('[a-zA-Z0-9]+$')
 
             funReturn.type = 'file'
@@ -76,7 +74,6 @@ let output = function (funUrl) {
         // url 为带参数的接口请求
         // 需要转化 url 中的键值为对象
         if (funUrlComponent.hash === '') {
-            // console.log('4.')
             funReturn.type = 'function'
             funReturn.apiPath = funUrlComponent.pathname
             return funReturn
@@ -86,7 +83,6 @@ let output = function (funUrl) {
         // url 为带参数，带锚点的接口请求
         // 需要转化 url 中的键值为对象
         if (funUrlComponent.hash !== '') {
-            // console.log('5.')
             funReturn.type = 'function'
             funReturn.apiPath = funUrlComponent.pathname
             return funReturn

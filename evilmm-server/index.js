@@ -1,8 +1,8 @@
 let imHttp = require('http')
 let imRoute = require('./route/route.js')
 
-let funServerIP = '192.168.1.2'
-// let funServerIP = '172.17.0.4'                  // 服务器ip
+// let funServerIP = '127.0.0.1'
+let funServerIP = '106.54.213.135'                  // 服务器ip
 let funServerPort = 80
 let funServer = imHttp.createServer()
 
